@@ -1,0 +1,20 @@
+{
+  "name": "vibe-stealer",
+  "version": "1.0.0",
+  "description": "Extract design aesthetics (colors, fonts, spacing) from any website",
+  "main": "index.js",
+  "bin": {
+    "vibe-stealer": "./index.js"
+  },
+  "scripts": {
+    "test": "node index.js https://stripe.com"
+  },
+  "keywords": ["design", "scraping", "css", "styles", "aesthetics"],
+  "author": "Joshua",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer-core": "^21.0.0",
+    "commander": "^11.0.0",
+    "chalk": "^4.1.2"
+  }
+}

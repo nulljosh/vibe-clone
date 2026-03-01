@@ -1,0 +1,55 @@
+:root {
+  /* Colors */
+  --color-primary: #2863b1;
+  --color-secondary: #533afd;
+  --color-accent-1: #2863b1;
+  --color-accent-2: #533afd;
+  --color-accent-3: #061b31;
+  --color-accent-4: #64748d;
+  --color-accent-5: #81b81a;
+
+  --color-neutral-1: #ffffff;
+  --color-neutral-2: #f8fafd;
+  --color-neutral-3: #000000;
+  --color-neutral-4: #101010;
+  --color-neutral-5: #ecf0f4;
+
+  /* Typography */
+  --font-primary: sohne-var;
+
+  --text-xs: 8px;
+  --text-sm: 12px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 22px;
+  --text-3xl: 26px;
+
+  --font-weight-1: 300;
+  --font-weight-2: 400;
+  --font-weight-3: 500;
+
+  /* Spacing */
+  --space-0: 0px;
+  --space-1: 0.5px;
+  --space-2: 1px;
+  --space-3: 2px;
+  --space-4: 3px;
+  --space-5: 4px;
+  --space-6: 6px;
+  --space-7: 8px;
+  --space-8: 12px;
+  --space-9: 16px;
+  --space-10: 24px;
+  --space-11: 32px;
+  --space-12: 48px;
+  --space-13: 64px;
+
+  /* Effects */
+  --shadow-sm: rgba(0, 0, 0, 0.1) 0px 30px 60px -50px, rgba(50, 50, 93, 0.25) 0px 30px 60px -10px;
+  --shadow-md: rgba(23, 23, 23, 0.08) 0px 15px 35px 0px;
+  --shadow-lg: rgba(23, 23, 23, 0.06) 0px 3px 6px 0px;
+
+  --radius: 8px;
+  --border: 0px none rgb(83, 58, 253);
+}
