@@ -41,10 +41,7 @@ export async function loadPage(
     executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     headless,
     args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-web-security'
+      '--disable-dev-shm-usage'
     ]
   });
 
