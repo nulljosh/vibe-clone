@@ -1,83 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 280" font-family="-apple-system, BlinkMacSystemFont, system-ui, sans-serif">
+<svg viewBox="0 0 700 300" width="700" height="300" xmlns="http://www.w3.org/2000/svg" style="font-family:monospace;background:#0f172a;border-radius:12px">
+  <text x="350" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#e2e8f0">vibe-clone — Design Token Extraction</text>
+  <rect x="30" y="50" width="100" height="50" rx="6" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+  <text x="80" y="75" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="bold">URL Input</text>
+  <text x="80" y="92" text-anchor="middle" font-size="10" fill="#cbd5e1">https://example.com</text>
+  <line x1="130" y1="75" x2="170" y2="75" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <rect x="170" y="50" width="110" height="50" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+  <text x="225" y="75" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="bold">Scraper</text>
+  <text x="225" y="92" text-anchor="middle" font-size="10" fill="#cbd5e1">Puppeteer</text>
+  <line x1="280" y1="75" x2="320" y2="75" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <rect x="320" y="50" width="130" height="50" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+  <text x="385" y="75" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="bold">Analyzer</text>
+  <text x="385" y="92" text-anchor="middle" font-size="10" fill="#cbd5e1">Color Clustering</text>
+  <line x1="450" y1="75" x2="490" y2="75" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <rect x="490" y="50" width="110" height="50" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+  <text x="545" y="75" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="bold">Formatter</text>
+  <text x="545" y="92" text-anchor="middle" font-size="10" fill="#cbd5e1">CSS/Tailwind</text>
+  <line x1="600" y1="75" x2="640" y2="75" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <rect x="640" y="50" width="60" height="50" rx="6" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+  <text x="670" y="75" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="bold">Output</text>
+  <text x="670" y="92" text-anchor="middle" font-size="10" fill="#cbd5e1">JSON</text>
+  <rect x="30" y="130" width="160" height="140" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+  <text x="110" y="150" text-anchor="middle" font-size="11" font-weight="bold" fill="#e2e8f0">Scraper</text>
+  <text x="40" y="170" font-size="10" fill="#cbd5e1">Load page via Puppeteer</text>
+  <text x="40" y="188" font-size="10" fill="#cbd5e1">Extract computed styles</text>
+  <text x="40" y="206" font-size="10" fill="#cbd5e1">DOM traversal</text>
+  <text x="40" y="224" font-size="10" fill="#cbd5e1">Bypass JS rendering</text>
+  <text x="40" y="242" font-size="10" fill="#cbd5e1">5000+ samples</text>
+  <rect x="205" y="130" width="160" height="140" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+  <text x="285" y="150" text-anchor="middle" font-size="11" font-weight="bold" fill="#e2e8f0">Analyzer</text>
+  <text x="215" y="170" font-size="10" fill="#cbd5e1">Color clustering</text>
+  <text x="215" y="188" font-size="10" fill="#cbd5e1">Dark mode detection</text>
+  <text x="215" y="206" font-size="10" fill="#cbd5e1">Typography scales</text>
+  <text x="215" y="224" font-size="10" fill="#cbd5e1">Spacing patterns</text>
+  <text x="215" y="242" font-size="10" fill="#cbd5e1">Visual grouping</text>
+  <rect x="380" y="130" width="160" height="140" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+  <text x="460" y="150" text-anchor="middle" font-size="11" font-weight="bold" fill="#e2e8f0">Formatter</text>
+  <text x="390" y="170" font-size="10" fill="#cbd5e1">CSS variables</text>
+  <text x="390" y="188" font-size="10" fill="#cbd5e1">Tailwind config</text>
+  <text x="390" y="206" font-size="10" fill="#cbd5e1">Raw JSON</text>
+  <text x="390" y="224" font-size="10" fill="#cbd5e1">Save to file</text>
+  <text x="390" y="242" font-size="10" fill="#cbd5e1">Pretty print</text>
+  <rect x="555" y="130" width="145" height="140" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+  <text x="627" y="150" text-anchor="middle" font-size="11" font-weight="bold" fill="#e2e8f0">Output</text>
+  <text x="565" y="170" font-size="10" fill="#cbd5e1">Design tokens</text>
+  <text x="565" y="188" font-size="10" fill="#cbd5e1">Color palette</text>
+  <text x="565" y="206" font-size="10" fill="#cbd5e1">Type system</text>
+  <text x="565" y="224" font-size="10" fill="#cbd5e1">Spacing scale</text>
+  <text x="565" y="242" font-size="10" fill="#cbd5e1">Effects/shadows</text>
   <defs>
-    <style>
-      .bg { fill: #0f0f0f; }
-      .box { fill: #1a1a1a; stroke: #0a84ff; stroke-width: 2; }
-      .box-alt { fill: #1a1a1a; stroke: #666; stroke-width: 1.5; }
-      .label { fill: #e0e0e0; font-size: 13px; font-weight: 600; text-anchor: middle; }
-      .sub { fill: #888; font-size: 11px; text-anchor: middle; }
-      .arrow { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
-      .section-label { fill: #555; font-size: 10px; font-weight: 600; letter-spacing: 0.8px; }
-    </style>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#64748b"/>
     </marker>
   </defs>
-
-  <rect width="900" height="280" class="bg"/>
-
-  <!-- Title -->
-  <text x="450" y="28" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">vibe-clone Pipeline</text>
-
-  <!-- INPUT -->
-  <text x="45" y="75" class="section-label">INPUT</text>
-  <rect x="20" y="80" width="100" height="60" rx="8" class="box"/>
-  <text x="70" y="108" class="label">Website URL</text>
-  <text x="70" y="125" class="sub">https://...</text>
-
-  <!-- Arrow 1 -->
-  <line x1="122" y1="110" x2="158" y2="110" class="arrow"/>
-
-  <!-- SCRAPER -->
-  <text x="160" y="75" class="section-label">SCRAPER</text>
-  <rect x="160" y="80" width="120" height="60" rx="8" class="box"/>
-  <text x="220" y="108" class="label">Puppeteer</text>
-  <text x="220" y="125" class="sub">Extract DOM styles</text>
-
-  <!-- Arrow 2 -->
-  <line x1="282" y1="110" x2="318" y2="110" class="arrow"/>
-
-  <!-- ANALYZER -->
-  <text x="320" y="75" class="section-label">ANALYZER</text>
-  <rect x="320" y="80" width="140" height="140" rx="8" class="box"/>
-  <text x="390" y="105" class="label">Color Clustering</text>
-  <line x1="330" y1="115" x2="450" y2="115" stroke="#333" stroke-width="1"/>
-  <text x="390" y="135" class="sub">Hue buckets (30°)</text>
-  <text x="390" y="152" class="sub">Lightness levels (20%)</text>
-  <text x="390" y="169" class="sub">Dark mode detect</text>
-  <text x="390" y="186" class="sub">Visual grouping</text>
-  <text x="390" y="210" class="label">+ Typography</text>
-  <text x="390" y="227" class="sub">Fonts, sizes, weights</text>
-
-  <!-- Arrow 3 -->
-  <line x1="462" y1="150" x2="498" y2="150" class="arrow"/>
-
-  <!-- FORMATTER -->
-  <text x="500" y="75" class="section-label">FORMATTER</text>
-  <rect x="500" y="80" width="120" height="140" rx="8" class="box"/>
-  <text x="560" y="115" class="label">CSS Variables</text>
-  <line x1="510" y1="125" x2="610" y2="125" stroke="#333" stroke-width="1"/>
-  <text x="560" y="150" class="label">Tailwind Config</text>
-  <line x1="510" y1="160" x2="610" y2="160" stroke="#333" stroke-width="1"/>
-  <text x="560" y="185" class="label">JSON</text>
-  <text x="560" y="207" class="sub">Palette + typography</text>
-
-  <!-- Arrow 4 -->
-  <line x1="622" y1="150" x2="658" y2="150" class="arrow"/>
-
-  <!-- OUTPUT -->
-  <text x="660" y="75" class="section-label">OUTPUT</text>
-  <rect x="660" y="80" width="100" height="140" rx="8" class="box"/>
-  <text x="710" y="120" class="label">Console</text>
-  <line x1="670" y1="130" x2="750" y2="130" stroke="#333" stroke-width="1"/>
-  <text x="710" y="155" class="label">File</text>
-  <line x1="670" y1="165" x2="750" y2="165" stroke="#333" stroke-width="1"/>
-  <text x="710" y="190" class="label">JSON API</text>
-
-  <!-- Legend -->
-  <text x="45" y="260" fill="#555" font-size="10">Input URL →</text>
-  <text x="150" y="260" fill="#0a84ff" font-size="10" font-weight="600">Scrape</text>
-  <text x="220" y="260" fill="#555" font-size="10">→ Analyze &amp; cluster →</text>
-  <text x="485" y="260" fill="#0a84ff" font-size="10" font-weight="600">Format</text>
-  <text x="565" y="260" fill="#555" font-size="10">→ Export</text>
 </svg>
