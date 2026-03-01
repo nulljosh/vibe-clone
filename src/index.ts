@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * Vibe Stealer - Extract design aesthetics from any website
- * TypeScript rewrite with advanced analysis and testing
- *
- * Usage:
- *   vibe-stealer <url>                    # Output CSS
- *   vibe-stealer <url> --format tailwind  # Output Tailwind config
- *   vibe-stealer <url> --format json      # Output JSON
- *   vibe-stealer <url> -o output.css      # Save to file
+ * vibe-clone: Extract design tokens from any website
+ * Scrape styles with Puppeteer, analyze with color clustering, output as CSS/Tailwind/JSON
+ * 
+ * Usage: npm run dev -- <url> [options]
+ * Options:
+ *   -f, --format    css | tailwind | json (default: css)
+ *   -o, --output    File path (optional)
+ *   --headless      true | false (default: true)
+ *   --integrate     Auto-integrate to ~/Documents/Code projects
  */
 
 import { program } from 'commander';
@@ -39,15 +40,12 @@ async function main(): Promise<void> {
 
   try {
     // Load page with Puppeteer
-    console.log(chalk.gray('Loading page...'));
     const headless = options.headless === 'true' || options.headless === true;
     const { browser: b, page } = await loadPage(url, { headless });
     browser = b;
 
-    // Extract raw styles
     console.log(chalk.gray('Extracting styles...'));
     const rawStyles = await extractStyles(page);
-
     await browser.close();
 
     // Analyze styles
@@ -98,17 +96,14 @@ async function main(): Promise<void> {
       console.log(chalk.gray('━'.repeat(80)));
     }
 
-    // Print summary
+    // Summary
     console.log(chalk.blue('\nDesign System Summary:'));
-    console.log(chalk.gray(`Primary Color: ${analyzed.palette.primary}`));
-    console.log(chalk.gray(`Primary Font: ${analyzed.typography.primary}`));
-    console.log(chalk.gray(`Spacing Base: ${analyzed.spacing.base}px`));
-    console.log(chalk.gray(`Total Colors: ${analyzed.palette.all.length}`));
-    if (analyzed.darkModeDetected !== undefined) {
-      console.log(chalk.gray(`Dark Mode: ${analyzed.darkModeDetected ? 'detected' : 'not detected'}`));
-    }
+    console.log(chalk.gray(`Primary: ${analyzed.palette.primary}`));
+    console.log(chalk.gray(`Font: ${analyzed.typography.primary}`));
+    console.log(chalk.gray(`Spacing base: ${analyzed.spacing.base}px`));
+    console.log(chalk.gray(`Colors: ${analyzed.palette.all.length}`));
     if (analyzed.palette.clusters.length > 0) {
-      console.log(chalk.gray(`Color Clusters: ${analyzed.palette.clusters.length}`));
+      console.log(chalk.gray(`Color clusters: ${analyzed.palette.clusters.length}`));
     }
     console.log();
   } catch (error) {

@@ -1,17 +1,18 @@
 /**
- * Advanced style analysis with color clustering and visual grouping
+ * Style analysis engine with intelligent color clustering
+ * Groups colors by hue + lightness for semantic meaning
  */
 
 import tinycolor from 'tinycolor2';
 import { RawStyles } from './scraper';
 
 export interface ColorCluster {
-  name: string;
-  representative: string;
-  colors: string[];
-  lightness: number;
-  saturation: number;
-  hue: number;
+  name: string;           // 'blue-60', 'red-45', etc.
+  representative: string; // Most saturated color in cluster
+  colors: string[];       // All colors in this cluster
+  lightness: number;      // Average lightness 0-100
+  saturation: number;     // Average saturation 0-100
+  hue: number;            // Average hue 0-360
 }
 
 export interface ColorPalette {
@@ -76,12 +77,11 @@ export interface AnalyzedStyles {
   };
 }
 
+// RGB/rgba to hex
 function rgbToHex(rgb: string): string {
   if (rgb.startsWith('#')) return rgb;
-
   const match = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
   if (!match) return rgb;
-
   const [, r, g, b] = match;
   return '#' + [r, g, b].map(x => {
     const hex = parseInt(x).toString(16);
@@ -89,19 +89,18 @@ function rgbToHex(rgb: string): string {
   }).join('');
 }
 
+// Check if color is grayscale (neutral)
 function isNeutralColor(color: string): boolean {
   const hex = rgbToHex(color);
   if (!hex.startsWith('#')) return false;
-
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
-
-  // Check if grayscale (RGB values are close)
   const diff = Math.max(Math.abs(r - g), Math.abs(g - b), Math.abs(r - b));
-  return diff < 10;
+  return diff < 10;  // Tolerance for grayscale detection
 }
 
+// Sort by frequency (most common first)
 function sortByFrequency(arr: string[]): string[] {
   const freq: Record<string, number> = {};
   arr.forEach(item => (freq[item] = (freq[item] || 0) + 1));
@@ -111,7 +110,8 @@ function sortByFrequency(arr: string[]): string[] {
 }
 
 /**
- * Cluster colors by hue and lightness (color grouping)
+ * Cluster colors by hue (30° buckets) + lightness (20% buckets)
+ * Creates semantic groupings: blue-60, red-45, neutral-90
  */
 function clusterColors(colors: string[]): ColorCluster[] {
   const clusters: Map<string, { colors: string[]; metrics: any[] }> = new Map();
@@ -121,8 +121,8 @@ function clusterColors(colors: string[]): ColorCluster[] {
     if (!tc.isValid()) return;
 
     const hsl = tc.toHsl();
-    const hueGroup = Math.round(hsl.h / 30) * 30; // Group by 30° hue buckets
-    const lightnessGroup = Math.round(hsl.l / 20) * 20; // Group by 20% lightness
+    const hueGroup = Math.round(hsl.h / 30) * 30;      // 30° buckets
+    const lightnessGroup = Math.round(hsl.l / 20) * 20; // 20% buckets
     const key = `${hueGroup}-${lightnessGroup}`;
 
     if (!clusters.has(key)) {
@@ -130,12 +130,16 @@ function clusterColors(colors: string[]): ColorCluster[] {
     }
 
     clusters.get(key)!.colors.push(color);
-    clusters.get(key)!.metrics.push({ hue: hsl.h, saturation: hsl.s, lightness: hsl.l });
+    clusters.get(key)!.metrics.push({
+      hue: hsl.h,
+      saturation: hsl.s,
+      lightness: hsl.l
+    });
   });
 
-  // Convert clusters to sorted array
+  // Convert to sorted array
   return Array.from(clusters.values())
-    .map((cluster, i) => {
+    .map((cluster) => {
       const avgMetrics = cluster.metrics.reduce(
         (acc, m) => ({
           hue: acc.hue + m.hue,
@@ -149,7 +153,7 @@ function clusterColors(colors: string[]): ColorCluster[] {
       avgMetrics.saturation /= cluster.metrics.length;
       avgMetrics.lightness /= cluster.metrics.length;
 
-      // Pick most saturated color as representative
+      // Pick most saturated as representative
       const representative = cluster.colors.reduce((best, color) => {
         const tc = tinycolor(color);
         const bestTc = tinycolor(best);
@@ -157,18 +161,9 @@ function clusterColors(colors: string[]): ColorCluster[] {
       });
 
       const hueNames: Record<number, string> = {
-        0: 'red',
-        30: 'orange',
-        60: 'yellow',
-        90: 'yellow-green',
-        120: 'green',
-        150: 'teal',
-        180: 'cyan',
-        210: 'light-blue',
-        240: 'blue',
-        270: 'purple',
-        300: 'magenta',
-        330: 'rose'
+        0: 'red', 30: 'orange', 60: 'yellow', 90: 'lime', 120: 'green',
+        150: 'cyan', 180: 'cyan', 210: 'blue', 240: 'blue', 270: 'purple',
+        300: 'magenta', 330: 'rose'
       };
 
       const closestHue = Math.round(avgMetrics.hue / 30) * 30;
@@ -184,20 +179,15 @@ function clusterColors(colors: string[]): ColorCluster[] {
         hue: avgMetrics.hue
       };
     })
-    .sort((a, b) => b.saturation - a.saturation);
+    .sort((a, b) => b.saturation - a.saturation); // Vibrant first
 }
 
 function extractColorPalette(colors: string[], backgroundColors: string[]): ColorPalette {
   const allColors = [...new Set([...colors, ...backgroundColors])];
-
-  // Convert to hex
   const hexColors = allColors.map(rgbToHex).filter(c => c.startsWith('#'));
 
-  // Separate neutral and accent colors
   const neutral = hexColors.filter(isNeutralColor);
   const accent = hexColors.filter(c => !isNeutralColor(c));
-
-  // Cluster colors for better grouping
   const clusters = clusterColors(accent);
 
   return {
@@ -211,33 +201,28 @@ function extractColorPalette(colors: string[], backgroundColors: string[]): Colo
 }
 
 function detectDarkMode(colors: string[], backgroundColors: string[]): boolean {
-  // Simple heuristic: if average background is dark, it's dark mode
+  // If average background lightness < 50%, it's dark mode
   const bgHex = backgroundColors.map(rgbToHex).filter(c => c.startsWith('#'));
   if (bgHex.length === 0) return false;
-
   const avgLightness = bgHex
     .map(c => tinycolor(c).toHsl().l)
     .reduce((a, b) => a + b, 0) / bgHex.length;
-
   return avgLightness < 50;
 }
 
 function extractTypography(fonts: string[], fontSizes: string[], fontWeights: string[]): Typography {
   const cleanFonts = fonts.map(f => f.split(',')[0].replace(/['"]/g, '').trim());
-
   const primaryFont = sortByFrequency(cleanFonts)[0] || '-apple-system';
   const secondaryFont = sortByFrequency(cleanFonts)[1];
 
-  // Parse font sizes to numbers
   const sizes = fontSizes
     .map(s => parseFloat(s))
     .filter(s => !isNaN(s) && s > 0)
     .sort((a, b) => a - b);
 
   const uniqueSizes = [...new Set(sizes)];
-
-  // Create type scale
   const baseSize = sizes[Math.floor(sizes.length / 2)] || 16;
+
   const scale: TypographyScale = {
     xs: uniqueSizes.find(s => s < baseSize * 0.75) || baseSize * 0.75,
     sm: uniqueSizes.find(s => s >= baseSize * 0.75 && s < baseSize * 0.875) || baseSize * 0.875,
@@ -248,24 +233,16 @@ function extractTypography(fonts: string[], fontSizes: string[], fontWeights: st
     '3xl': uniqueSizes.find(s => s > baseSize * 1.5) || baseSize * 1.875
   };
 
-  const weights = sortByFrequency(fontWeights).slice(0, 5);
-
   return {
     primary: primaryFont,
     secondary: secondaryFont,
     scale,
-    weights
+    weights: sortByFrequency(fontWeights).slice(0, 5)
   };
 }
 
 function extractSpacingScale(spacing: RawStyles['spacing']): SpacingScale {
-  const allSpacing = [
-    ...spacing.padding,
-    ...spacing.margin,
-    ...spacing.gap
-  ];
-
-  // Parse spacing values to numbers (in px)
+  const allSpacing = [...spacing.padding, ...spacing.margin, ...spacing.gap];
   const values = allSpacing
     .flatMap(s => s.split(' '))
     .map(v => parseFloat(v))
@@ -273,11 +250,9 @@ function extractSpacingScale(spacing: RawStyles['spacing']): SpacingScale {
     .sort((a, b) => a - b);
 
   const uniqueValues = [...new Set(values)];
-
-  // Create spacing scale (base-8 or base-4)
   const base = uniqueValues.find(v => v === 8 || v === 4) || 8;
   const scale = [0, 1, 2, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128]
-    .map(multiplier => multiplier * (base / 8));
+    .map(m => m * (base / 8));
 
   return {
     base,
@@ -309,6 +284,9 @@ function extractEffects(shadows: string[], borderRadius: string[], borders: stri
   };
 }
 
+/**
+ * Main entry point: transform raw styles into design system
+ */
 export function analyzeStyles(rawStyles: RawStyles): AnalyzedStyles {
   const palette = extractColorPalette(rawStyles.colors, rawStyles.backgroundColors);
   const typography = extractTypography(rawStyles.fonts, rawStyles.fontSizes, rawStyles.fontWeights);
