@@ -1,20 +1,43 @@
 {
   "name": "vibe-stealer",
-  "version": "1.0.0",
-  "description": "Extract design aesthetics (colors, fonts, spacing) from any website",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "Extract design aesthetics (colors, fonts, spacing) from any website with advanced analysis",
+  "main": "dist/index.js",
   "bin": {
-    "vibe-stealer": "./index.js"
+    "vibe-stealer": "./dist/index.js"
   },
   "scripts": {
-    "test": "node index.js https://stripe.com"
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "clean": "rm -rf dist coverage"
   },
-  "keywords": ["design", "scraping", "css", "styles", "aesthetics"],
-  "author": "Joshua",
+  "keywords": ["design", "scraping", "css", "styles", "aesthetics", "design-tokens"],
+  "author": "Joshua Trommel",
   "license": "MIT",
   "dependencies": {
     "puppeteer-core": "^21.0.0",
     "commander": "^11.0.0",
-    "chalk": "^4.1.2"
+    "chalk": "^5.0.0",
+    "sharp": "^0.33.0",
+    "tinycolor2": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/jest": "^29.5.0",
+    "@types/commander": "^2.12.0",
+    "@types/tinycolor2": "^1.4.3",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "prettier": "^3.0.0",
+    "eslint": "^8.40.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.0"
   }
 }
