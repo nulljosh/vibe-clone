@@ -1,6 +1,18 @@
-# vibe-clone
+<div align="center">
 
-Extract design tokens from any website. Scrapes with Puppeteer, analyzes computed styles, outputs CSS variables, Tailwind config, or JSON.
+# Vibe Clone
+
+<img src="icon.svg" alt="Vibe Clone" width="120" />
+
+Extract design tokens from any website.
+
+</div>
+
+## Architecture
+
+![Architecture](architecture.svg)
+
+Scrapes with Puppeteer, analyzes computed styles, outputs CSS variables, Tailwind config, or JSON.
 
 ## Features
 
