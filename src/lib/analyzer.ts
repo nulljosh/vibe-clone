@@ -24,6 +24,14 @@ export interface ColorPalette {
   all: string[];
 }
 
+export interface ContrastIssue {
+  color1: string;
+  color2: string;
+  ratio: number;
+  failsAA: boolean;
+  failsAALarge: boolean;
+}
+
 export interface TypographyScale {
   xs: number;
   sm: number;
@@ -75,6 +83,63 @@ export interface AnalyzedStyles {
     secondaryAccent: string;
     neutralBase: string;
   };
+}
+
+function relativeLuminance(hex: string): number {
+  const color = tinycolor(hex);
+  if (!color.isValid()) return 0;
+
+  const { r, g, b } = color.toRgb();
+  const linearize = (channel: number): number => {
+    const sRgb = channel / 255;
+    return sRgb <= 0.03928
+      ? sRgb / 12.92
+      : Math.pow((sRgb + 0.055) / 1.055, 2.4);
+  };
+
+  const rLin = linearize(r);
+  const gLin = linearize(g);
+  const bLin = linearize(b);
+  return 0.2126 * rLin + 0.7152 * gLin + 0.0722 * bLin;
+}
+
+export function contrastRatio(hex1: string, hex2: string): number {
+  const color1 = tinycolor(hex1);
+  const color2 = tinycolor(hex2);
+  if (!color1.isValid() || !color2.isValid()) return 1;
+
+  const l1 = relativeLuminance(color1.toHexString());
+  const l2 = relativeLuminance(color2.toHexString());
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+export function checkContrastPairs(palette: ColorPalette): ContrastIssue[] {
+  const colors = [...new Set(palette.all)]
+    .map(rgbToHex)
+    .filter(color => tinycolor(color).isValid());
+  const issues: ContrastIssue[] = [];
+
+  for (let i = 0; i < colors.length; i++) {
+    for (let j = i + 1; j < colors.length; j++) {
+      const ratio = contrastRatio(colors[i], colors[j]);
+      const failsAA = ratio < 4.5;
+      const failsAALarge = ratio < 3;
+
+      if (failsAA || failsAALarge) {
+        issues.push({
+          color1: colors[i],
+          color2: colors[j],
+          ratio,
+          failsAA,
+          failsAALarge
+        });
+      }
+    }
+  }
+
+  return issues.sort((a, b) => a.ratio - b.ratio);
 }
 
 // RGB/rgba to hex

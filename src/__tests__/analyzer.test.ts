@@ -1,4 +1,4 @@
-import { analyzeStyles, rgbToHex } from '../lib/analyzer';
+import { analyzeStyles, checkContrastPairs, contrastRatio, rgbToHex } from '../lib/analyzer';
 import { RawStyles } from '../lib/scraper';
 
 describe('Analyzer', () => {
@@ -35,6 +35,44 @@ describe('Analyzer', () => {
 
     it('should handle invalid input', () => {
       expect(rgbToHex('invalid')).toBe('invalid');
+    });
+  });
+
+  describe('contrastRatio', () => {
+    it('should return 21 for black and white', () => {
+      expect(contrastRatio('#000000', '#ffffff')).toBe(21);
+    });
+
+    it('should return 1 for identical colors', () => {
+      expect(contrastRatio('#ffffff', '#ffffff')).toBe(1);
+    });
+
+    it('should return ~4.54 for #767676 on white', () => {
+      expect(contrastRatio('#767676', '#ffffff')).toBeCloseTo(4.54, 2);
+    });
+  });
+
+  describe('checkContrastPairs', () => {
+    it('should flag failing color pairs for AA and AA-large', () => {
+      const issues = checkContrastPairs({
+        primary: '#ffffff',
+        accent: ['#777777', '#aaaaaa'],
+        neutral: ['#ffffff'],
+        clusters: [],
+        all: ['#ffffff', '#777777', '#aaaaaa']
+      });
+
+      expect(issues.length).toBeGreaterThan(0);
+      expect(
+        issues.some(
+          issue => issue.color1 === '#ffffff' && issue.color2 === '#777777' && issue.failsAA && !issue.failsAALarge
+        )
+      ).toBe(true);
+      expect(
+        issues.some(
+          issue => issue.color1 === '#ffffff' && issue.color2 === '#aaaaaa' && issue.failsAA && issue.failsAALarge
+        )
+      ).toBe(true);
     });
   });
 

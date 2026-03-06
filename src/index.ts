@@ -18,7 +18,7 @@ import * as path from 'path';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
 import { loadPage, extractStyles } from './lib/scraper';
-import { analyzeStyles } from './lib/analyzer';
+import { analyzeStyles, checkContrastPairs } from './lib/analyzer';
 import { generateCSS, generateTailwind, generateJSON } from './lib/formatter';
 
 program
@@ -27,6 +27,7 @@ program
   .option('-f, --format <type>', 'Output format (css, tailwind, json)', 'css')
   .option('-o, --output <file>', 'Output file path')
   .option('--headless <bool>', 'Run browser in headless mode', 'true')
+  .option('--check-contrast', 'Check extracted palette for WCAG contrast issues')
   .option('--integrate', 'Auto-integrate vibe into all Code projects')
   .parse();
 
@@ -104,6 +105,24 @@ async function main(): Promise<void> {
     console.log(chalk.gray(`Colors: ${analyzed.palette.all.length}`));
     if (analyzed.palette.clusters.length > 0) {
       console.log(chalk.gray(`Color clusters: ${analyzed.palette.clusters.length}`));
+    }
+
+    if (options.checkContrast) {
+      const issues = checkContrastPairs(analyzed.palette);
+      console.log(chalk.blue('\nContrast Check (WCAG 2.0):'));
+      if (issues.length === 0) {
+        console.log(chalk.green('No color-pair issues found for AA (4.5:1).'));
+      } else {
+        console.table(
+          issues.map(issue => ({
+            color1: issue.color1,
+            color2: issue.color2,
+            ratio: issue.ratio.toFixed(2),
+            AA: issue.failsAA ? 'FAIL' : 'PASS',
+            'AA-large': issue.failsAALarge ? 'FAIL' : 'PASS'
+          }))
+        );
+      }
     }
     console.log();
   } catch (error) {
