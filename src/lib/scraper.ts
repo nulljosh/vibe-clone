@@ -54,7 +54,7 @@ export async function loadPage(
   });
 
   // Wait for page to fully render
-  await page.waitForTimeout(2000);
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   return { browser, page };
 }
