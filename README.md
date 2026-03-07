@@ -94,3 +94,11 @@ npm run clean              # Remove artifacts
 ## License
 
 MIT
+
+## Roadmap
+
+- [ ] Figma export format
+- [ ] Component detection (buttons, cards, navbars)
+- [ ] Animation extraction
+- [ ] Batch URL processing
+- [ ] Browser extension
