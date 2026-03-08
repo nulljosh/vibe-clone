@@ -1,6 +1,6 @@
 {
   "name": "vibe-stealer",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Extract design aesthetics (colors, fonts, spacing) from any website with advanced analysis",
   "main": "dist/index.js",
   "bin": {
